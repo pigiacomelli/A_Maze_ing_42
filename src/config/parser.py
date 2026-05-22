@@ -1,0 +1,32 @@
+from pathlib import Path
+
+from config.exceptions import ConfigError
+
+
+def parse_config_file(path: str) -> dict[str, str]:
+    config: dict[str, str] = {}
+
+    try:
+        lines = Path(path).read_text().splitlines()
+    except OSError as exc:
+        raise ConfigError(f"Cannot open config file: {path}") from exc
+
+    for line_number, line in enumerate(lines, start=1):
+        line = line.strip()
+
+        if not line or line.startswith("#"):
+            continue
+
+        if "=" not in line:
+            raise ConfigError(
+                f"Invalid line {line_number}: missing '='"
+            )
+
+        key, value = line.split("=", maxsplit=1)
+
+        key = key.strip()
+        value = value.strip()
+
+        config[key] = value
+
+    return config
