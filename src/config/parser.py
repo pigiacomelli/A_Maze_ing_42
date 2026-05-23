@@ -7,7 +7,8 @@ def parse_config_file(path: str) -> dict[str, str]:
     config: dict[str, str] = {}
 
     try:
-        lines = Path(path).read_text().splitlines()
+        with open(path, "r", encoding="utf-8") as f:
+            lines = f.read().splitlines()
     except OSError as exc:
         raise ConfigError(f"Cannot open config file: {path}") from exc
 

@@ -100,8 +100,7 @@ class HexExporter:
             self.maze_to_hex_grid()
         )
 
-        content = "\n".join(lines)
+        content = "\n".join(lines) + "\n"
 
-        Path(output_file).write_text(
-            content
-        )
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(content)
