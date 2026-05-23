@@ -86,10 +86,14 @@ class TerminalUI:
                 display[cy + 1][cx - 1] = "█"
                 display[cy + 1][cx + 1] = "█"
 
-                if cell.has_wall(Direction.NORTH): display[cy - 1][cx] = "█"
-                if cell.has_wall(Direction.SOUTH): display[cy + 1][cx] = "█"
-                if cell.has_wall(Direction.WEST): display[cy][cx - 1] = "█"
-                if cell.has_wall(Direction.EAST): display[cy][cx + 1] = "█"
+                if cell.has_wall(Direction.NORTH):
+                    display[cy - 1][cx] = "█"
+                if cell.has_wall(Direction.SOUTH):
+                    display[cy + 1][cx] = "█"
+                if cell.has_wall(Direction.WEST):
+                    display[cy][cx - 1] = "█"
+                if cell.has_wall(Direction.EAST):
+                    display[cy][cx + 1] = "█"
 
                 if cell.is_pattern:
                     display[cy][cx] = "█"

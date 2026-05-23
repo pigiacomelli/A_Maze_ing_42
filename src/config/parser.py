@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from config.exceptions import ConfigError
 
 

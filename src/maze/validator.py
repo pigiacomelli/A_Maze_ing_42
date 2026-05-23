@@ -37,21 +37,30 @@ class MazeValidator:
         for x in range(self.maze.width):
             if not self.maze.get_cell(x, 0).has_wall(Direction.NORTH):
                 raise ValidatorError(f"North border open at ({x}, 0)")
-            if not self.maze.get_cell(x, self.maze.height - 1).has_wall(Direction.SOUTH):
-                raise ValidatorError(f"South border open at ({x}, {self.maze.height - 1})")
+            if not self.maze.get_cell(
+                x, self.maze.height - 1
+            ).has_wall(Direction.SOUTH):
+                raise ValidatorError(
+                    f"South border open at ({x}, {self.maze.height - 1})"
+                )
 
         for y in range(self.maze.height):
             if not self.maze.get_cell(0, y).has_wall(Direction.WEST):
                 raise ValidatorError(f"West border open at (0, {y})")
             if not self.maze.get_cell(self.maze.width - 1, y).has_wall(Direction.EAST):
-                raise ValidatorError(f"East border open at ({self.maze.width - 1}, {y})")
+                raise ValidatorError(
+                    f"East border open at ({self.maze.width - 1}, {y})"
+                )
 
     def _check_consistency(self) -> None:
         for cell in self.maze.iter_cells():
             for direction, neighbor in self.maze.get_neighbors(cell):
-                if cell.has_wall(direction) != neighbor.has_wall(get_opposite_direction(direction)):
+                opp = get_opposite_direction(direction)
+                if cell.has_wall(direction) != neighbor.has_wall(opp):
                     raise ValidatorError(
-                        f"Inconsistent wall between {cell.get_position()} and {neighbor.get_position()}")
+                        f"Inconsistent wall between {cell.get_position()} "
+                        f"and {neighbor.get_position()}"
+                    )
 
     def _check_connectivity(self) -> None:
         self.maze.reset_visited()
@@ -68,14 +77,17 @@ class MazeValidator:
             reachable += 1
 
             for direction, neighbor in self.maze.get_neighbors(curr):
-                if not neighbor.is_pattern and not neighbor.is_visited() and not curr.has_wall(direction):
+                if (not neighbor.is_pattern and not neighbor.is_visited()
+                        and not curr.has_wall(direction)):
                     neighbor.mark_visited()
                     stack.append(neighbor)
 
         total_traversable = sum(1 for c in self.maze.iter_cells() if not c.is_pattern)
         if reachable != total_traversable:
             raise ValidatorError(
-                f"Maze is not fully connected. Reached {reachable}/{total_traversable} traversable cells.")
+                f"Maze is not fully connected. "
+                f"Reached {reachable}/{total_traversable} traversable cells."
+            )
 
     def _check_no_3x3_open(self) -> None:
         from maze.directions import Direction
@@ -108,4 +120,7 @@ class MazeValidator:
         traversable_cells = sum(1 for c in self.maze.iter_cells() if not c.is_pattern)
 
         if edges != traversable_cells - 1:
-            raise ValidatorError(f"Maze is not perfect. Vertices: {traversable_cells}, Edges: {edges}")
+            raise ValidatorError(
+                f"Maze is not perfect. "
+                f"Vertices: {traversable_cells}, Edges: {edges}"
+            )

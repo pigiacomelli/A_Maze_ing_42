@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mazegen"
+version = "1.0.0"
+description = "A-Maze-ing project: A maze generator for 42 curriculum."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "ando-sou", email = "ando-sou@student.42porto.com" },
+    { name = "pgiacome", email = "pgiacome@student.42porto.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+a_maze_ing = "a_maze_ing:main"

@@ -1,11 +1,11 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent / "src"))
-
 from config.parser import parse_config_file
 from config.validator import validate_config
 from config.exceptions import ConfigError
+
+sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 
 def main() -> None:

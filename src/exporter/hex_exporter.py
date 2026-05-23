@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from maze.cell import Cell
 from maze.maze import Maze
 from maze.directions import Direction
