@@ -9,6 +9,21 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 
 def main() -> None:
+    """
+    Main entry point for the A-Maze-ing program.
+
+    Reads the configuration file provided as a command-line argument,
+    generates a maze, runs the terminal UI, and handles export.
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: If the number of arguments is incorrect or configuration is invalid.
+    """
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <config_file>")
         sys.exit(1)

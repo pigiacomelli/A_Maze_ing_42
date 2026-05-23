@@ -4,6 +4,7 @@ from generator.dfs_generator import DFSGenerator
 from maze.maze import Maze
 from maze.validator import MazeValidator, ValidatorError
 from solver.bfs_solver import BFSSolver
+from maze.directions import Direction
 
 COLORS = [
     "\033[0m",
@@ -25,7 +26,7 @@ class TerminalUI:
         self.color_index = 1
 
         self.maze = Maze(config.width, config.height)
-        self.path: list = []
+        self.path: list[Direction] = []
         self.path_string: str = ""
 
         self._generate_and_export(first_run=True)
@@ -46,7 +47,12 @@ class TerminalUI:
         self.path_string = solver.path_to_string(self.path)
 
         try:
-            validator = MazeValidator(self.maze, perfect=self.config.perfect)
+            validator = MazeValidator(
+                self.maze,
+                perfect=self.config.perfect,
+                entry=self.config.entry,
+                exit_=self.config.exit
+            )
             validator.validate()
         except ValidatorError as e:
             print(f"\n\033[91m[Validator Warning] {e}\033[0m")

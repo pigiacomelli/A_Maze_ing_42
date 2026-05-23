@@ -55,11 +55,17 @@ def get_opposite_direction(
     direction: Direction,
 ) -> Direction:
     """
-    Return the opposite direction.
+    Return the opposite direction for a given cardinal direction.
 
     Example:
         NORTH -> SOUTH
         EAST -> WEST
+
+    Args:
+        direction (Direction): The cardinal direction to invert.
+
+    Returns:
+        Direction: The opposite cardinal direction.
     """
 
     return OPPOSITE_DIRECTION[direction]

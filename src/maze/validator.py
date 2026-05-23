@@ -11,9 +11,17 @@ class MazeValidator:
     Validates a generated maze structure.
     """
 
-    def __init__(self, maze: Maze, perfect: bool = True) -> None:
+    def __init__(
+        self,
+        maze: Maze,
+        perfect: bool = True,
+        entry: tuple[int, int] | None = None,
+        exit_: tuple[int, int] | None = None
+    ) -> None:
         self.maze = maze
         self.perfect = perfect
+        self.entry = entry
+        self.exit_ = exit_
 
     def validate(self) -> None:
         """
@@ -24,12 +32,23 @@ class MazeValidator:
         self._check_consistency()
         self._check_connectivity()
         self._check_no_3x3_open()
+        self._check_entry_exit()
         if self.perfect:
             self._check_perfect_maze()
 
     def _check_dimensions(self) -> None:
         if self.maze.width <= 0 or self.maze.height <= 0:
             raise ValidatorError("Maze dimensions must be > 0.")
+
+    def _check_entry_exit(self) -> None:
+        if self.entry:
+            ex, ey = self.entry
+            if self.maze.get_cell(ex, ey).is_pattern:
+                raise ValidatorError(f"Entry {self.entry} falls on a pattern cell.")
+        if self.exit_:
+            ex, ey = self.exit_
+            if self.maze.get_cell(ex, ey).is_pattern:
+                raise ValidatorError(f"Exit {self.exit_} falls on a pattern cell.")
 
     def _check_borders(self) -> None:
         from maze.directions import Direction
