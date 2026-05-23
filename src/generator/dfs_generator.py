@@ -118,21 +118,27 @@ class DFSGenerator:
     def _make_imperfect(self) -> None:
         """
         Randomly remove some walls to create an imperfect maze.
+        By only targeting dead-ends (cells with 3 walls), we guarantee
+        no 3x3 open areas are created.
         """
-        cells = [c for c in self.maze.iter_cells() if not c.is_pattern]
-        num_to_remove = len(cells) // 20
+        dead_ends = [
+            c for c in self.maze.iter_cells()
+            if not c.is_pattern and sum(c.walls.values()) == 3
+        ]
+
+        self.random.shuffle(dead_ends)
+        num_to_remove = len(dead_ends) // 2
 
         removed = 0
-        while removed < num_to_remove:
-            cell = self.random.choice(cells)
+        for cell in dead_ends:
+            if removed >= num_to_remove:
+                break
+
             neighbors = self.maze.get_neighbors(cell)
-            if not neighbors:
-                continue
+            self.random.shuffle(neighbors)
 
-            direction, neighbor = self.random.choice(neighbors)
-            if neighbor.is_pattern:
-                continue
-
-            if cell.has_wall(direction):
-                self.maze.remove_wall_between(cell, neighbor, direction)
-                removed += 1
+            for direction, neighbor in neighbors:
+                if not neighbor.is_pattern and cell.has_wall(direction):
+                    self.maze.remove_wall_between(cell, neighbor, direction)
+                    removed += 1
+                    break

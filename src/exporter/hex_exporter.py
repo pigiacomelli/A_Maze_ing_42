@@ -72,31 +72,11 @@ class HexExporter:
 
         lines: list[str] = []
 
-        lines.append(
-            f"WIDTH={self.maze.width}"
-        )
-
-        lines.append(
-            f"HEIGHT={self.maze.height}"
-        )
-
-        lines.append(
-            f"ENTRY={entry[0]},{entry[1]}"
-        )
-
-        lines.append(
-            f"EXIT={exit_[0]},{exit_[1]}"
-        )
-
-        lines.append(
-            f"PATH={shortest_path}"
-        )
-
-        lines.append("GRID=")
-
-        lines.extend(
-            self.maze_to_hex_grid()
-        )
+        lines.extend(self.maze_to_hex_grid())
+        lines.append("")
+        lines.append(f"{entry[0]},{entry[1]}")
+        lines.append(f"{exit_[0]},{exit_[1]}")
+        lines.append(shortest_path)
 
         content = "\n".join(lines) + "\n"
 

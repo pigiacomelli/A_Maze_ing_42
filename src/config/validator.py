@@ -56,6 +56,10 @@ def validate_config(raw: dict[str, str]) -> Config:
 
     perfect = raw["PERFECT"].lower() == "true"
 
+    output_file = raw["OUTPUT_FILE"].strip()
+    if not output_file:
+        raise ConfigError("OUTPUT_FILE cannot be empty")
+
     seed_str = raw.get("SEED")
     seed = int(seed_str) if seed_str is not None else None
 
@@ -64,7 +68,7 @@ def validate_config(raw: dict[str, str]) -> Config:
         height=height,
         entry=entry,
         exit=exit_,
-        output_file=raw["OUTPUT_FILE"],
+        output_file=output_file,
         perfect=perfect,
         seed=seed,
     )

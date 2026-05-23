@@ -52,12 +52,20 @@ class TerminalUI:
             print(f"\n\033[91m[Validator Warning] {e}\033[0m")
 
         exporter = HexExporter(self.maze)
-        exporter.export(
-            output_file=self.config.output_file,
-            entry=self.config.entry,
-            exit_=self.config.exit,
-            shortest_path=self.path_string,
-        )
+        try:
+            exporter.export(
+                output_file=self.config.output_file,
+                entry=self.config.entry,
+                exit_=self.config.exit,
+                shortest_path=self.path_string,
+            )
+        except OSError as e:
+            if first_run:
+                import sys
+                print(f"Export failed: {e}")
+                sys.exit(1)
+            else:
+                print(f"\n\033[91m[Export Warning] {e}\033[0m")
 
     def render(self) -> None:
         """
