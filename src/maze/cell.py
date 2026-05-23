@@ -18,6 +18,7 @@ class Cell:
     y: int
 
     visited: bool = False
+    is_pattern: bool = False
 
     walls: dict[Direction, bool] = field(
         default_factory=lambda: {
