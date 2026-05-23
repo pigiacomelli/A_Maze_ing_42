@@ -2,10 +2,7 @@ from collections import deque
 
 from maze.cell import Cell
 from maze.maze import Maze
-from maze.directions import (
-    Direction,
-    DIRECTION_OFFSETS,
-)
+from maze.directions import Direction
 
 
 class BFSSolver:

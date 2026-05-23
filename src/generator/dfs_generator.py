@@ -2,7 +2,6 @@ import random
 
 from maze.cell import Cell
 from maze.maze import Maze
-from maze.directions import Direction
 
 
 class DFSGenerator:

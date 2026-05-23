@@ -1,3 +1,5 @@
+import sys
+
 from maze.maze import Maze
 
 from generator.dfs_generator import (
@@ -10,11 +12,26 @@ from exporter.hex_exporter import (
     HexExporter,
 )
 
+from config.parser import parse_config_file
+from config.validator import validate_config
+from config.exceptions import ConfigError
+
 
 def main() -> None:
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} <config_file>")
+        sys.exit(1)
+
     print("Program started")
 
-    maze = Maze(10, 12)
+    try:
+        raw_config = parse_config_file(sys.argv[1])
+        config = validate_config(raw_config)
+    except ConfigError as e:
+        print(f"Configuration error: {e}")
+        sys.exit(1)
+
+    maze = Maze(config.width, config.height)
 
     generator = DFSGenerator(
         maze,
@@ -26,8 +43,8 @@ def main() -> None:
     solver = BFSSolver(maze)
 
     path = solver.solve(
-        (0, 0),
-        (9, 9),
+        config.entry,
+        config.exit,
     )
 
     path_string = (
@@ -40,9 +57,9 @@ def main() -> None:
     exporter = HexExporter(maze)
 
     exporter.export(
-        output_file="maze.txt",
-        entry=(0, 0),
-        exit_=(9, 9),
+        output_file=config.output_file,
+        entry=config.entry,
+        exit_=config.exit,
         shortest_path=path_string,
     )
 
