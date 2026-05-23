@@ -7,7 +7,7 @@ from maze.maze import Maze
 class DFSGenerator:
     """
     Generate mazes using
-    Recursive Backtracking DFS.
+    Iterative Backtracking DFS.
     """
 
     def __init__(
@@ -39,38 +39,37 @@ class DFSGenerator:
         if not self.perfect:
             self._make_imperfect()
 
-    def _dfs(
-        self,
-        current: Cell,
-    ) -> None:
+    def _dfs(self, start_cell: Cell) -> None:
         """
-        Recursive DFS generation.
+        Execute an iterative Depth-First Search to generate the maze.
+
+        Using an iterative approach with a stack prevents RecursionError
+        on large maze configurations.
+
+        Args:
+            start_cell (Cell): The starting point for the maze generation.
         """
+        stack: list[Cell] = [start_cell]
+        start_cell.mark_visited()
 
-        current.mark_visited()
+        while stack:
+            current = stack[-1]
+            neighbors = self.maze.get_unvisited_neighbors(current)
 
-        neighbors = (
-            self.maze.get_unvisited_neighbors(
-                current
-            )
-        )
+            valid_neighbors = [
+                (direction, neighbor)
+                for direction, neighbor in neighbors
+                if not neighbor.is_pattern
+            ]
 
-        self.random.shuffle(neighbors)
+            if valid_neighbors:
+                direction, neighbor = self.random.choice(valid_neighbors)
 
-        for (
-            direction,
-            neighbor,
-        ) in neighbors:
-            if neighbor.is_visited() or neighbor.is_pattern:
-                continue
-
-            self.maze.remove_wall_between(
-                current,
-                neighbor,
-                direction,
-            )
-
-            self._dfs(neighbor)
+                self.maze.remove_wall_between(current, neighbor, direction)
+                neighbor.mark_visited()
+                stack.append(neighbor)
+            else:
+                stack.pop()
 
     def reset(self) -> None:
         """
