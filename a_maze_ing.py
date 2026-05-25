@@ -1,11 +1,11 @@
 import sys
 from pathlib import Path
 
-from config.parser import parse_config_file
-from config.validator import validate_config
-from config.exceptions import ConfigError
-
 sys.path.insert(0, str(Path(__file__).parent / "src"))
+
+from config.parser import parse_config_file  # noqa: E402
+from config.validator import validate_config  # noqa: E402
+from config.exceptions import ConfigError  # noqa: E402
 
 
 def main() -> None:
