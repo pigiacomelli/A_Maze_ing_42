@@ -5,7 +5,7 @@ Audit performed on branch `feat/animation` after merging `origin/main`.
 Important repository state notes:
 - `feat/animation` was initially 6 commits behind `origin/main` and 2 commits ahead.
 - I merged `origin/main` into `feat/animation` with commit `0a5fbce` (`merge origin/main into feat/animation`).
-- The branch is now 3 commits ahead and 0 behind `origin/main`.
+- The branch is now 5 commits ahead and 0 behind `origin/main`.
 - A local generated `maze.txt` was preserved in `stash@{0}` with message `codex-preserve-generated-maze`.
 - Running the program regenerated `maze.txt`, so `maze.txt` is dirty after the audit.
 
@@ -172,7 +172,7 @@ Git / branch:
 - `git restore --theirs -- maze.txt` -> resolved generated-file conflict using `origin/main`.
 - `git add ...` -> staged merge files.
 - `git commit -m "merge origin/main into feat/animation"` -> created merge commit `0a5fbce`.
-- `git rev-list --left-right --count HEAD...origin/main` -> after merge `3 0`.
+- `git rev-list --left-right --count HEAD...origin/main` -> after report status update `5 0`.
 
 Required commands:
 - `make install` -> PASS. Only pip cache ownership warning.
@@ -458,4 +458,3 @@ Weak areas if you cannot explain them:
 - Why warnings from `MazeValidator` should not be ignored for export correctness.
 - How path string directions map to grid movement.
 - How the package exposes `MazeGenerator` even though internal modules are also packaged.
-
