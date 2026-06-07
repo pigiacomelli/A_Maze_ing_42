@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from config.models import Config
 from exporter.hex_exporter import HexExporter
@@ -64,7 +65,8 @@ class TerminalUI:
             )
             validator.validate()
         except ValidatorError as e:
-            print(f"\n\033[91m[Validator Warning] {e}\033[0m")
+            print(f"Validation error: {e}")
+            sys.exit(1)
 
         exporter = HexExporter(self.maze)
         try:
@@ -76,7 +78,6 @@ class TerminalUI:
             )
         except OSError as e:
             if first_run:
-                import sys
                 print(f"Export failed: {e}")
                 sys.exit(1)
             else:
