@@ -12,6 +12,17 @@ REQUIRED_KEYS = {
 }
 
 
+def parse_int(value: str, key: str) -> int:
+    """
+    Parse an integer configuration value.
+    """
+
+    try:
+        return int(value)
+    except ValueError as exc:
+        raise ConfigError(f"{key} must be an integer") from exc
+
+
 def parse_position(value: str) -> tuple[int, int]:
     """
     Parse coordinates written in x,y format.
@@ -38,8 +49,8 @@ def validate_config(raw: dict[str, str]) -> Config:
             f"Missing keys: {', '.join(sorted(missing))}"
         )
 
-    width = int(raw["WIDTH"])
-    height = int(raw["HEIGHT"])
+    width = parse_int(raw["WIDTH"], "WIDTH")
+    height = parse_int(raw["HEIGHT"], "HEIGHT")
 
     if width <= 0:
         raise ConfigError("WIDTH must be > 0")
@@ -62,14 +73,18 @@ def validate_config(raw: dict[str, str]) -> Config:
                 "Coordinates out of maze bounds"
             )
 
-    perfect = raw["PERFECT"].lower() == "true"
+    perfect_value = raw["PERFECT"].lower()
+    if perfect_value not in {"true", "false"}:
+        raise ConfigError("PERFECT must be True or False")
+
+    perfect = perfect_value == "true"
 
     output_file = raw["OUTPUT_FILE"].strip()
     if not output_file:
         raise ConfigError("OUTPUT_FILE cannot be empty")
 
     seed_str = raw.get("SEED")
-    seed = int(seed_str) if seed_str is not None else None
+    seed = parse_int(seed_str, "SEED") if seed_str is not None else None
 
     return Config(
         width=width,
