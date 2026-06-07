@@ -4,6 +4,7 @@ import time
 from config.models import Config
 from exporter.hex_exporter import HexExporter
 from generator.dfs_generator import DFSGenerator
+from generator.prim_generator import PrimGenerator
 from maze.maze import Maze
 from maze.validator import MazeValidator, ValidatorError
 from solver.bfs_solver import BFSSolver
@@ -49,7 +50,7 @@ class TerminalUI:
 
         seed = self.config.seed if first_run else None
 
-        generator = DFSGenerator(self.maze, seed=seed, perfect=self.config.perfect)
+        generator = self._create_generator(seed)
         generator.generate()
 
         solver = BFSSolver(self.maze)
@@ -82,6 +83,26 @@ class TerminalUI:
                 sys.exit(1)
             else:
                 print(f"\n\033[91m[Export Warning] {e}\033[0m")
+
+    def _create_generator(
+        self,
+        seed: int | None,
+    ) -> DFSGenerator | PrimGenerator:
+        """
+        Create the configured maze generator.
+        """
+        if self.config.algorithm == "prim":
+            return PrimGenerator(
+                self.maze,
+                seed=seed,
+                perfect=self.config.perfect,
+            )
+
+        return DFSGenerator(
+            self.maze,
+            seed=seed,
+            perfect=self.config.perfect,
+        )
 
     def build_base_display(self) -> list[list[str]]:
         """

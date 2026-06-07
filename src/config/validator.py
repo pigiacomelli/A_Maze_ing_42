@@ -86,6 +86,10 @@ def validate_config(raw: dict[str, str]) -> Config:
     seed_str = raw.get("SEED")
     seed = parse_int(seed_str, "SEED") if seed_str is not None else None
 
+    algorithm = raw.get("ALGORITHM", "dfs").strip().lower()
+    if algorithm not in {"dfs", "prim"}:
+        raise ConfigError("ALGORITHM must be dfs or prim")
+
     return Config(
         width=width,
         height=height,
@@ -94,4 +98,5 @@ def validate_config(raw: dict[str, str]) -> Config:
         output_file=output_file,
         perfect=perfect,
         seed=seed,
+        algorithm=algorithm,
     )

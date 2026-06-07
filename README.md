@@ -52,18 +52,33 @@ The application uses a configuration file (e.g., `config.txt`) containing key-va
 ### Optional Keys:
 
 * `SEED`: An integer seed for reproducible generation. (e.g., `SEED=42`)
+* `ALGORITHM`: Maze generation algorithm. Accepted values are `dfs` and `prim`.
+  If omitted, the application uses `dfs`. (e.g., `ALGORITHM=prim`)
 
 ## Algorithm
 
 ### Explanation
 
-The core generation algorithm relies on an **Iterative Backtracking Depth-First Search (DFS)**.
+The default generation algorithm relies on an **Iterative Backtracking Depth-First Search (DFS)**.
 Starting from a valid initial cell, the algorithm explores the grid by randomly selecting an unvisited neighboring cell, removing the wall between them, and pushing the new cell onto a stack. When it reaches a dead-end (a cell with no unvisited neighbors), it backtracks by popping cells from the stack until it finds a cell with unvisited neighbors.
 For imperfect mazes, the algorithm subsequently identifies dead-ends and randomly removes walls to create loops, ensuring no 3x3 open areas are formed.
+
+The bonus generator uses **Randomized Prim**. It starts from one cell, keeps a randomized frontier of neighboring cells, and repeatedly connects one unvisited frontier cell back into the growing maze. Like DFS, it creates a perfect maze by default and respects the protected "42" pattern cells.
 
 ### Justification
 
 The DFS algorithm was selected because it naturally produces mazes with long, winding corridors and deep dead-ends, which significantly increases the complexity and visual appeal of the maze. We opted specifically for an **iterative** implementation using a stack rather than a recursive one. This design choice guarantees system stability and prevents the `RecursionError` that occurs in Python when generating very large mazes.
+
+Use `dfs` when you want longer corridors and a classic backtracking maze feel. Use `prim` when you want a more evenly branched maze with shorter local passages.
+
+## Advanced Features / Bonuses
+
+* Multiple generation algorithms: Iterative DFS and Randomized Prim.
+* Animation during maze rendering.
+* Pac-Man shortest path animation.
+* Regenerate maze from the interactive UI.
+* Toggle shortest path display.
+* Wall color cycling.
 
 ## Team & Project Management
 
@@ -105,7 +120,13 @@ pip install .
 from mazegen import MazeGenerator
 
 # Initialize the reusable generator facade
-generator = MazeGenerator(width=20, height=15, perfect=True, seed=42)
+generator = MazeGenerator(
+    width=20,
+    height=15,
+    perfect=True,
+    seed=42,
+    algorithm="prim",
+)
 
 # Generate the maze structure
 maze = generator.generate()

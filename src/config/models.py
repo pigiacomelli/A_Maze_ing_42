@@ -14,3 +14,4 @@ class Config:
     output_file: str
     perfect: bool
     seed: int | None = None
+    algorithm: str = "dfs"
