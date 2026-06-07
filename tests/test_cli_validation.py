@@ -120,3 +120,28 @@ def test_entry_on_pattern_cell_stops_before_export(tmp_path: Path) -> None:
     assert "falls on a pattern cell" in output
     assert "Traceback" not in output
     assert not output_file.exists()
+
+
+def test_exit_on_pattern_cell_stops_before_export(tmp_path: Path) -> None:
+    output_file = tmp_path / "maze.txt"
+    config = write_config(
+        tmp_path,
+        base_config(
+            tmp_path,
+            WIDTH="30",
+            HEIGHT="20",
+            ENTRY="0,0",
+            EXIT="11,7",
+            OUTPUT_FILE=str(output_file),
+            SEED="1",
+        ),
+    )
+
+    result = run_app(config)
+    output = result.stdout + result.stderr
+
+    assert result.returncode == 1
+    assert "Validation error:" in output
+    assert "falls on a pattern cell" in output
+    assert "Traceback" not in output
+    assert not output_file.exists()

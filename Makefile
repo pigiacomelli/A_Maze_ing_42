@@ -18,3 +18,6 @@ lint:
 		--ignore-missing-imports \
 		--disallow-untyped-defs \
 		--check-untyped-defs
+
+validate-output:
+	python3 tools/output_validator.py maze.txt
