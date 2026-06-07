@@ -19,6 +19,3 @@ classifiers = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[project.scripts]
-a_maze_ing = "a_maze_ing:main"

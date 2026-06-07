@@ -3,6 +3,10 @@ from maze.maze import Maze
 
 
 class ValidatorError(Exception):
+    """
+    Raised when the generated maze structure is invalid.
+    """
+
     pass
 
 

@@ -2,6 +2,10 @@ from config.exceptions import ConfigError
 
 
 def parse_config_file(path: str) -> dict[str, str]:
+    """
+    Parse a KEY=VALUE configuration file into a dictionary.
+    """
+
     config: dict[str, str] = {}
 
     try:

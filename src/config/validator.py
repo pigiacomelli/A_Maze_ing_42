@@ -13,6 +13,10 @@ REQUIRED_KEYS = {
 
 
 def parse_position(value: str) -> tuple[int, int]:
+    """
+    Parse coordinates written in x,y format.
+    """
+
     try:
         x_str, y_str = value.split(",")
         return int(x_str), int(y_str)
@@ -23,6 +27,10 @@ def parse_position(value: str) -> tuple[int, int]:
 
 
 def validate_config(raw: dict[str, str]) -> Config:
+    """
+    Validate raw configuration values and return a Config object.
+    """
+
     missing = REQUIRED_KEYS - raw.keys()
 
     if missing:
